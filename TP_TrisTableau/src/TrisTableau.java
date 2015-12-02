@@ -561,3 +561,5 @@ public class TrisTableau{
 // Compil  : javac -d ../class ../src/TrisTableau.java
 // execut  : java Start SimplesTableau
 // Javadoc : javadoc -private -d ../JavaDoc ../src/TrisTableau.java
+
+// Penis !!!
