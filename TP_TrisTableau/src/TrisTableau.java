@@ -79,7 +79,14 @@ public class TrisTableau{
 	 * @param nbElem [description]
 	 */
 	void triRapide(int[] leTab, int nbElem){
-
+		int indS=separer(leTab, indL(indS-1));
+		if(leTab==null)
+			System.out.println("le tableau n'est pas initialisé");
+		else if(nbElem > leTab.length)
+			System.out.println("le tableau est hors limites");
+		else
+			// On appelle la méthode avec les bons paramètres
+			triRapideRec(leTab, 0, nbElem-1);
 	}
 
 	/**
@@ -90,7 +97,18 @@ public class TrisTableau{
 	 * @param nbElem [description]
 	 */
 	void triRapideRec(int[] tab, int indL, int indR){
-
+		int indS = separer(leTab,indL,indR);
+		// On vérifie les paramètres
+		if(leTab==null)
+			System.out.println("le tableau n'est pas initialisé");
+		else if(nbElem > leTab.length)
+			System.out.println("le tableau est hors limites");
+		else{
+			if(indS-1>indL)
+				triRapideRec(leTab, indL, indS-1);
+			if(indS+1<indR)
+				triRapideRec(leTab, indS+1, indR);
+		}
 	}
 
 	/**
