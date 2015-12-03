@@ -101,7 +101,27 @@ public class TrisTableau{
 	 * @return      [description]
 	 */
 	int separer(int[] tab, int indL, int indR){
-
+		// On vérifie les paramètres
+		if(leTab==null)
+			System.out.println("Tableau non initialise");
+		else if(indL<0 || indR>leTab.length || indL>=indR)
+			System.out.println("Indices sortent des limites");
+		else{
+			int pivot = leTab[indL];
+			while(indL<indR){
+				while(leTab[indR]>pivot)
+					indR--;
+				echange(indL,indR);
+				if(indL==indR)
+					break;
+				indL++;
+				while(leTab[indL]<pivot)
+					indL++;
+				echange(indL,indR);
+				indR--;
+			}
+		}
+		return indL;
 	}
 
 	/**
@@ -264,7 +284,24 @@ public class TrisTableau{
 	 * @return        [description]
 	 */
 	int[] triParComptageFreq(int[] leTab, int nbElem){
-
+		int[] ret = new int[nbElem];
+		cpt = 0;
+		// On vérifie les paramètres
+		if(nbElem>leTab.length)
+			System.out.println("Le nombre d'élément sort des limites");
+		else{
+			// On commence le trie
+			int indice = 0;
+			int[] tabFreq = creerTabFreq(leTab, nbElem);
+			for(int i=0; i<tabFreq.length; i++)
+				if(tabFreq[i]!=0)
+					for(int j=0; j<=tabFreq; j++){
+						ret[indice] = i;
+						indice++;
+						cpt++;
+					}
+		}
+		return ret;
 	}
 
 	/**
@@ -301,14 +338,10 @@ public class TrisTableau{
 			// On initialise le tableau
 			retour = new int[max];
 			// Pour chaque case, on regarde la fréquence
-			for(int i=0; i<max; i++)
-				for(int j=0; j<nbElem; j++){
-					// On incrémente le nombre d'itération
-					cpt++;
-					// On compte le nombre d'apparition d'une valeur
-					if(leTab[j] = i)
-						retour[i]++;
-				}
+			for(int i=0; i<nbElem; i++){
+				retour[leTab[i]]++;
+				cpt++;
+			}
 		}
 		// On retourne l'adresse du tableau
 		return retour;
@@ -451,10 +484,10 @@ public class TrisTableau{
 			grandTableau[i] = i;
 
 		// On test avec la première méthode :
-		long tempsDebut = System.currentTimeMillis();
+		long tempsDebut = System.currentTimeNano();
 		System.out.println("Test avec la recherche séquentielle : ");
-		rechercheSeq(grandTableau, 1000000, 555555);
-		System.out.println("Execute en "+(System.currentTimeMillis()-tempsDebut)+".\n\n");
+		rechercheSeq(grandTableau, 1000000, 1000001);
+		System.out.println("Execute en "+(System.currentTimeNano()-tempsDebut)+" millisecondes, pour "+cpt+" iterations \n\n");
 	}
 
 	/**
@@ -474,8 +507,7 @@ public class TrisTableau{
 		System.out.println("\nTest avec la recherche dichotomique");
 		rechercheDicho(grandTableau, 1000000, 999999);
 		// On affiche le nombre d'itération
-		System.out.println("nb Iterations : "+iteration);
-		System.out.println("Execute en "+(System.currentTimeMillis()-tempsDebut)+".\n\n");
+		System.out.println("Execute en "+(System.currentTimeNano()-tempsDebut)+" millisecondes, pour "+cpt+" iterations \n\n");
 	}
 
 	/**
