@@ -90,6 +90,7 @@ public class TrisTableau{
 	 * @param nbElem [description]
 	 */
 	void triRapideRec(int[] tab, int indL, int indR){
+		// On vérifie les paramètres
 		if(leTab==null)
 			System.out.println("Tableau non créé");
 		else if(nbElem <= 0 || nbElem > leTab.length)
@@ -97,6 +98,7 @@ public class TrisTableau{
 		else if(indL<0 || indL>leTab.length || indR<0 || indR>leTab.length)
 			System.out.println("indices en dehors des bornes du tableau");
 		else{
+			// On fait le trie rapide
 			int i = indL, j = indR;
 	    	int pivot = leTab[indL + (indR-indL)/2];
 			while (i <= j) {
@@ -107,9 +109,9 @@ public class TrisTableau{
 				if (i <= j)
 					echange(leTab, nbElem, i++, j++);
 			}
-			if (indL < j)
+			if(indL < j)
 				triRapide(leTab, nbElem, indL, j);
-			if (i < indR)
+			if(indR > i)
 				triRapide(leTab, nbElem, i, indR);
 		}
 	}
