@@ -79,14 +79,7 @@ public class TrisTableau{
 	 * @param nbElem [description]
 	 */
 	void triRapide(int[] leTab, int nbElem){
-		int indS=separer(leTab, indL(indS-1));
-		if(leTab==null)
-			System.out.println("le tableau n'est pas initialisé");
-		else if(nbElem > leTab.length)
-			System.out.println("le tableau est hors limites");
-		else
-			// On appelle la méthode avec les bons paramètres
-			triRapideRec(leTab, 0, nbElem-1);
+		
 	}
 
 	/**
@@ -97,18 +90,7 @@ public class TrisTableau{
 	 * @param nbElem [description]
 	 */
 	void triRapideRec(int[] tab, int indL, int indR){
-		int indS = separer(leTab,indL,indR);
-		// On vérifie les paramètres
-		if(leTab==null)
-			System.out.println("le tableau n'est pas initialisé");
-		else if(nbElem > leTab.length)
-			System.out.println("le tableau est hors limites");
-		else{
-			if(indS-1>indL)
-				triRapideRec(leTab, indL, indS-1);
-			if(indS+1<indR)
-				triRapideRec(leTab, indS+1, indR);
-		}
+		
 	}
 
 	/**
@@ -120,22 +102,22 @@ public class TrisTableau{
 	 */
 	int separer(int[] tab, int indL, int indR){
 		// On vérifie les paramètres
-		if(leTab==null)
+		if(tab==null)
 			System.out.println("Tableau non initialise");
-		else if(indL<0 || indR>leTab.length || indL>=indR)
+		else if(indL<0 || indR>tab.length || indL>=indR)
 			System.out.println("Indices sortent des limites");
 		else{
-			int pivot = leTab[indL];
+			int pivot = tab[indL];
 			while(indL<indR){
-				while(leTab[indR]>pivot)
+				while(tab[indR]>pivot)
 					indR--;
-				echange(indL,indR);
+				echange(tab, indL,indR);
 				if(indL==indR)
 					break;
 				indL++;
-				while(leTab[indL]<pivot)
+				while(tab[indL]<pivot)
 					indL++;
-				echange(indL,indR);
+				echange(tab, indL,indR);
 				indR--;
 			}
 		}
@@ -184,7 +166,7 @@ public class TrisTableau{
 			// On inverse la case minimum avec la case i
 			// A partir de là, toutes les cases entre 0 et i sont triées.
 			// On incrémente i, et on recommence
-			for(i=0, i<(nbElem-1), i++){
+			for(i=0; i<(nbElem-1); i++){
 				// On défini le minimum de base
 				min=leTab[i];
 				k=i;
@@ -313,7 +295,7 @@ public class TrisTableau{
 			int[] tabFreq = creerTabFreq(leTab, nbElem);
 			for(int i=0; i<tabFreq.length; i++)
 				if(tabFreq[i]!=0)
-					for(int j=0; j<=tabFreq; j++){
+					for(int j=0; j<=tabFreq[i]; j++){
 						ret[indice] = i;
 						indice++;
 						cpt++;
@@ -343,14 +325,14 @@ public class TrisTableau{
 		// On vérifie que les valeurs sont >=0
 		for(int i=0; i<nbElem && valeursOK; i++){
 			if(leTab[i]<0)
-				valeurOK = 0;
+				valeursOK = false;
 			// On vérifie le max
 			if(leTab[i]>max)
 				max = leTab[i];
 		}
 
 		// On vérifie que tout est bon
-		if(max==0 || !valeurOK)
+		if(max==0 || !valeursOK)
 			System.out.println("Les valeurs ne sont pas assez grandes");
 		else{
 			// On initialise le tableau
@@ -377,7 +359,7 @@ public class TrisTableau{
 			System.out.println("Le tableau n'est pas initialise");
 		else if(indL<0 || indL>leTab.length || indR<0 || indR>leTab.length || indL>=indR)
 			System.out.println("Indices en dehors des limites");
-		else
+		else{
 			// On crée le sous-tableau
 			int[] sousTab = new int[indR-indL];
 
@@ -385,6 +367,7 @@ public class TrisTableau{
 			for(int i=indL; i<indR; i++)
 				sousTab[i-indL] = leTab[i];
 			afficherTab(leTab, leTab.length);
+		}
 	}
 
 
@@ -453,20 +436,6 @@ public class TrisTableau{
 	}
 
 	/**
-	 * Test de la méthode rechercheSeq
-	 */
-	void testRechercheDicho(){
-
-	}
-
-	/**
-	 * Test de la méthode rechercheSeq
-	 */
-	void testRechercheSeq(){
-
-	}
-
-	/**
 	 * Test de la méthode creerTabFreq
 	 */
 	void testCreerTabFreq(){
@@ -496,16 +465,14 @@ public class TrisTableau{
 		// On lance le test
 		System.out.println("On teste la procédure de rechercheSeq()");
 		
-		// On crée le tableau trié
+		// On crée le tableau
 		int[] grandTableau = new int[1000000];
-		for(int i=0; i<1000000; i++)
-			grandTableau[i] = i;
 
 		// On test avec la première méthode :
-		long tempsDebut = System.currentTimeNano();
+		long tempsDebut = System.nanoTime();
 		System.out.println("Test avec la recherche séquentielle : ");
 		rechercheSeq(grandTableau, 1000000, 1000001);
-		System.out.println("Execute en "+(System.currentTimeNano()-tempsDebut)+" millisecondes, pour "+cpt+" iterations \n\n");
+		System.out.println("Execute en "+(System.nanoTime()-tempsDebut)+" millisecondes, pour "+cpt+" iterations \n\n");
 	}
 
 	/**
@@ -521,11 +488,11 @@ public class TrisTableau{
 			grandTableau[i] = i;
 
 		// On test avec la seconde methode
-		long tempsDebut = System.currentTimeMillis();
+		long tempsDebut = System.nanoTime();
 		System.out.println("\nTest avec la recherche dichotomique");
-		rechercheDicho(grandTableau, 1000000, 999999);
+		rechercheDicho(grandTableau, 1000000, 1000001);
 		// On affiche le nombre d'itération
-		System.out.println("Execute en "+(System.currentTimeNano()-tempsDebut)+" millisecondes, pour "+cpt+" iterations \n\n");
+		System.out.println("Execute en "+(System.nanoTime()-tempsDebut)+" millisecondes, pour "+cpt+" iterations \n\n");
 	}
 
 	/**
@@ -536,15 +503,15 @@ public class TrisTableau{
 		System.out.println("On teste la procédure de rechercheDicho()");
 		
 		// On crée le tableau non trié
-		int[] grandTableau = new int[1000000];
-		remplirAleatoir
+		int[] leTab = new int[1000000];
+		remplirAleatoire(leTab, leTab.length, 0, 100);
 
 		// On test avec la seconde methode
-		long tempsDebut = System.currentTimeMillis();
+		long tempsDebut = System.nanoTime();
 		System.out.println("\nTest avec la recherche dichotomique");
-		rechercheDicho(grandTableau, 1000000, 999999);
+		rechercheDicho(leTab, 1000000, 101);
 		// On affiche le nombre d'itération
-		System.out.println("Execute en "+(System.currentTimeNano()-tempsDebut)+" millisecondes, pour "+cpt+" iterations \n\n");
+		System.out.println("Execute en "+(System.nanoTime()-tempsDebut)+" millisecondes, pour "+cpt+" iterations \n\n");
 	}
 
 	/**
@@ -565,13 +532,6 @@ public class TrisTableau{
 	 * Test de l'efficacité de la méthode triRapide
 	 */
 	void testTriRapideEfficacite(){
-
-	}
-
-	/**
-	 * Test de l'efficacité de la méthode rechercheSeq
-	 */
-	void testRechercheSeqEfficacite(){
 
 	}
 
@@ -639,6 +599,22 @@ public class TrisTableau{
 		else
 			for(int i=0; i<nbElem; i++)
 				leTab[i] = tirerAleatoire(min, max);
+	}
+
+	/**
+	 * Renvoie un entier aleatoire compris entre min et max (min <= valeur <= max).
+	 * @param  min la valeur de l'entier minimum
+	 * @param  max la valeur de l'entier maximum
+	 * @return     l'entier aleatoire
+	 */
+	int tirerAleatoire(int min, int max){
+		// On verifie les parametres
+		if(min>=max)
+			System.out.println("Le minimum est plus grand ou egual au maximum...");
+		else{
+			return (int)(Math.random() * (max-min)) + min;
+		}
+		return max; // On retourne le nombre plus petit (max<min)
 	}
 }
 
