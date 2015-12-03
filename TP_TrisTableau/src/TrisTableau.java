@@ -533,14 +533,36 @@ public class TrisTableau{
 	 * Test de l'efficacité de la méthode triSimple
 	 */
 	void testTriSimpleEfficacite(){
+		// On lance le test
+		System.out.println("On teste la procédure de triSimple()");
+		
+		// On crée le tableau non trié
+		int[] leTab = new int[1000000];
+		remplirAleatoire(leTab, leTab.length, 0, 100);
 
+		// On test la methode
+		long tempsDebut = System.nanoTime();
+		triSimple(leTab, 1000000, 101);
+		// On affiche le nombre d'itération
+		System.out.println("Execute en "+(System.nanoTime()-tempsDebut)+" millisecondes, pour "+cpt+" iterations \n\n");
 	}
 
 	/**
 	 * Test de l'efficacité de la méthode triRapide
 	 */
 	void testTriRapideEfficacite(){
+		// On lance le test
+		System.out.println("On teste la procédure de triRapide()");
+		
+		// On crée le tableau non trié
+		int[] leTab = new int[1000000];
+		remplirAleatoire(leTab, leTab.length, 0, 100);
 
+		// On test la methode
+		long tempsDebut = System.nanoTime();
+		triRapide(leTab, 1000000, 101);
+		// On affiche le nombre d'itération
+		System.out.println("Execute en "+(System.nanoTime()-tempsDebut)+" millisecondes, pour "+cpt+" iterations \n\n");
 	}
 
 /////////////////////////////////// METHODES DEJA CREEES ///////////////////////////////////////
@@ -627,5 +649,5 @@ public class TrisTableau{
 }
 
 // Compil  : javac -d ../class ../src/TrisTableau.java
-// execut  : java Start SimplesTableau
+// execut  : java Start TrisTableau
 // Javadoc : javadoc -private -d ../JavaDoc ../src/TrisTableau.java
