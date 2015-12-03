@@ -14,7 +14,21 @@ public class TrisTableau{
 	 * Le point d'entrée du programme.
 	 */
 	void principal(){
-		testTriSimpleEtVeriftri();
+		// Test des methodes
+		
+
+		// On fait les tests, avec des tailles différentes de tableau
+		System.out.println("Tests de performance, avec différentes tailles de tableau...\n+-------------------+----------------+--------------------------------+-------------------+\n| Taille (nb cases) | Methode testee | temps execution (nanosecondes) | nombre iterations |\n+-------------------+----------------+--------------------------------+-------------------+");
+
+		// Test de performance des methodes
+		for(int i=1000; i<1000000; i*=10){
+			testTriSimpleEfficacite(i);
+			testTriRapideEfficacite(i);
+			testTriABullesEfficacite(i);
+			testRechercheSeqEfficacite(i);
+			testRechercheDichoEfficacite(i);
+			testTriParComptageFreqEfficacite(i);
+		}
 	}
 
 	/**
@@ -84,7 +98,7 @@ public class TrisTableau{
 			System.out.println("nbElem sort des limites");
 		else
 			// On appelle la méthode
-			triRapideRec(leTab, length, 0, length);
+			triRapideRec(leTab, 0, nbElem);
 	}
 
 	/**
@@ -94,12 +108,10 @@ public class TrisTableau{
 	 * @param indL   [description]
 	 * @param nbElem [description]
 	 */
-	void triRapideRec(int[] tab, int indL, int indR){
+	void triRapideRec(int[] leTab, int indL, int indR){
 		// On vérifie les paramètres
 		if(leTab==null)
 			System.out.println("Tableau non créé");
-		else if(nbElem <= 0 || nbElem > leTab.length)
-			System.out.println("nbElem en dehors des bornes du tableau");
 		else if(indL<0 || indL>leTab.length || indR<0 || indR>leTab.length)
 			System.out.println("indices en dehors des bornes du tableau");
 		else{
@@ -112,12 +124,12 @@ public class TrisTableau{
 				while (leTab[j] > pivot)
 					j--;
 				if (i <= j)
-					echange(leTab, nbElem, i++, j++);
+					echange(leTab, leTab.length, i++, j++);
 			}
 			if(indL < j)
-				triRapide(leTab, nbElem, indL, j);
+				triRapideRec(leTab, indL, j);
 			if(indR > i)
-				triRapide(leTab, nbElem, i, indR);
+				triRapideRec(leTab, i, indR);
 		}
 	}
 
@@ -128,12 +140,12 @@ public class TrisTableau{
 	 * @param  indR [description]
 	 * @return      [description]
 	 */
-	int separer(int[] tab, int indL, int indR){
+	int separer(int[] leTab, int indL, int indR){
 		if(leTab!=null){
 			System.out.println("Tableau non créé");
 			indL = -1;
 		}
-		else if(indL<0 || indR>tab.length || indL>=indR){
+		else if(indL<0 || indR>leTab.length || indL>=indR){
 			System.out.println("Indices en dehors des limites");
 			indL = -1;
 		}
@@ -497,108 +509,108 @@ public class TrisTableau{
 	/**
 	 * [testRechercheSeqEfficacite description]
 	 */
-	void testRechercheSeqEfficacite(){
+	void testRechercheSeqEfficacite(int nbCases){
 		// On lance le test
 		System.out.println("On teste la procédure de rechercheSeq()");
 		
 		// On crée le tableau
-		int[] grandTableau = new int[1000000];
+		int[] grandTableau = new int[nbCases];
 
 		// On test la méthode :
 		long tempsDebut = System.nanoTime();
-		rechercheSeq(grandTableau, 1000000, 1000001);
-		System.out.println("Execute en "+(System.nanoTime()-tempsDebut)+" millisecondes, pour "+cpt+" iterations \n\n");
+		rechercheSeq(grandTableau, nbCases, nbCases+1);
+		System.out.println("|    "+nbCases+"    |  rechercheSeq  |         "+(System.nanoTime()-tempsDebut)+"            |  " + cpt + "      |\n+-------------------+----------------+--------------------------------+-------------------+");
 	}
 
 	/**
 	 * Test de l'efficacité de la méthode rechercheDicho
 	 */
-	void testRechercheDichoEfficacite(){
+	void testRechercheDichoEfficacite(int nbCases){
 		// On lance le test
 		System.out.println("On teste la procédure de rechercheDicho()");
 		
 		// On crée le tableau trié
-		int[] grandTableau = new int[1000000];
-		for(int i=0; i<1000000; i++)
+		int[] grandTableau = new int[nbCases];
+		for(int i=0; i<nbCases; i++)
 			grandTableau[i] = i;
 
 		// On test la methode
 		long tempsDebut = System.nanoTime();
-		rechercheDicho(grandTableau, 1000000, 1000001);
+		rechercheDicho(grandTableau, nbCases, nbCases+1);
 		// On affiche le nombre d'itération
-		System.out.println("Execute en "+(System.nanoTime()-tempsDebut)+" millisecondes, pour "+cpt+" iterations \n\n");
+		System.out.println("|    "+nbCases+"    | rechercheDicho |         "+(System.nanoTime()-tempsDebut)+"            |  " + cpt + "      |\n+-------------------+----------------+--------------------------------+-------------------+");
 	}
 
 	/**
 	 * Test de l'efficacité de la méthode triParComptageFreq
 	 */
-	void testTriParComptageFreqEfficacite(){
+	void testTriParComptageFreqEfficacite(int nbCases){
 		// On lance le test
 		System.out.println("On teste la procédure de triParComptageFreq()");
 		
 		// On crée le tableau non trié
-		int[] leTab = new int[1000000];
+		int[] leTab = new int[nbCases];
 		remplirAleatoire(leTab, leTab.length, 0, 100);
 
 		// On test la methode
 		long tempsDebut = System.nanoTime();
-		triParComptageFreq(leTab, 1000000);
+		triParComptageFreq(leTab, nbCases);
 		// On affiche le nombre d'itération
-		System.out.println("Execute en "+(System.nanoTime()-tempsDebut)+" millisecondes, pour "+cpt+" iterations \n\n");
+		System.out.println("|    "+nbCases+"    | triParCompFreq |         "+(System.nanoTime()-tempsDebut)+"            |  " + cpt + "      |\n+-------------------+----------------+--------------------------------+-------------------+");
 	}
 
 	/**
 	 * Test de l'efficacité de la méthode triABulles
 	 */
-	void testTriABullesEfficacite(){
+	void testTriABullesEfficacite(int nbCases){
 		// On lance le test
 		System.out.println("On teste la procédure de triABulles()");
 		
 		// On crée le tableau non trié
-		int[] leTab = new int[1000000];
+		int[] leTab = new int[nbCases];
 		remplirAleatoire(leTab, leTab.length, 0, 100);
 
 		// On test la methode
 		long tempsDebut = System.nanoTime();
-		triABulles(leTab, 1000000);
+		triABulles(leTab, nbCases);
 		// On affiche le nombre d'itération
-		System.out.println("Execute en "+(System.nanoTime()-tempsDebut)+" millisecondes, pour "+cpt+" iterations \n\n");
+		System.out.println("|    "+nbCases+"    |   triABulles   |         "+(System.nanoTime()-tempsDebut)+"            |  " + cpt + "      |\n+-------------------+----------------+--------------------------------+-------------------+");
 	}
 
 	/**
 	 * Test de l'efficacité de la méthode triSimple
 	 */
-	void testTriSimpleEfficacite(){
+	void testTriSimpleEfficacite(int nbCases){
 		// On lance le test
 		System.out.println("On teste la procédure de triSimple()");
 		
 		// On crée le tableau non trié
-		int[] leTab = new int[1000000];
+		int[] leTab = new int[nbCases];
 		remplirAleatoire(leTab, leTab.length, 0, 100);
 
 		// On test la methode
 		long tempsDebut = System.nanoTime();
-		triSimple(leTab, 1000000);
+		triSimple(leTab, nbCases);
 		// On affiche le nombre d'itération
-		System.out.println("Execute en "+(System.nanoTime()-tempsDebut)+" millisecondes, pour "+cpt+" iterations \n\n");
+		System.out.println("|    "+nbCases+"    |   triSimple    |         "+(System.nanoTime()-tempsDebut)+"            |  " + cpt + "      |\n+-------------------+----------------+--------------------------------+-------------------+");
 	}
 
 	/**
 	 * Test de l'efficacité de la méthode triRapide
 	 */
-	void testTriRapideEfficacite(){
+	void testTriRapideEfficacite(int nbCases){
 		// On lance le test
 		System.out.println("On teste la procédure de triRapide()");
 		
 		// On crée le tableau non trié
-		int[] leTab = new int[1000000];
+		int[] leTab = new int[nbCases];
 		remplirAleatoire(leTab, leTab.length, 0, 100);
 
 		// On test la methode
 		long tempsDebut = System.nanoTime();
-		triRapide(leTab, 1000000);
+		triRapide(leTab, nbCases);
 		// On affiche le nombre d'itération
-		System.out.println("Execute en "+(System.nanoTime()-tempsDebut)+" millisecondes, pour "+cpt+" iterations \n\n");
+		System.out.println("|    "+nbCases+"    |   triRapide    |         "+(System.nanoTime()-tempsDebut)+"            |  " + cpt + "      |\n+-------------------+----------------+--------------------------------+-------------------+");
 	}
 
 /////////////////////////////////// METHODES DEJA CREEES ///////////////////////////////////////
