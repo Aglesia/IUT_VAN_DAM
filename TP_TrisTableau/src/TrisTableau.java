@@ -101,7 +101,7 @@ public class TrisTableau{
 	 * @return      [description]
 	 */
 	int separer(int[] tab, int indL, int indR){
-		// On vérifie les paramètres
+		/*// On vérifie les paramètres
 		if(tab==null)
 			System.out.println("Tableau non initialise");
 		else if(indL<0 || indR>tab.length || indL>=indR)
@@ -121,7 +121,7 @@ public class TrisTableau{
 				indR--;
 			}
 		}
-		return indL;
+		return indL;*/
 	}
 
 	/**
@@ -468,9 +468,8 @@ public class TrisTableau{
 		// On crée le tableau
 		int[] grandTableau = new int[1000000];
 
-		// On test avec la première méthode :
+		// On test la méthode :
 		long tempsDebut = System.nanoTime();
-		System.out.println("Test avec la recherche séquentielle : ");
 		rechercheSeq(grandTableau, 1000000, 1000001);
 		System.out.println("Execute en "+(System.nanoTime()-tempsDebut)+" millisecondes, pour "+cpt+" iterations \n\n");
 	}
@@ -487,9 +486,8 @@ public class TrisTableau{
 		for(int i=0; i<1000000; i++)
 			grandTableau[i] = i;
 
-		// On test avec la seconde methode
+		// On test la methode
 		long tempsDebut = System.nanoTime();
-		System.out.println("\nTest avec la recherche dichotomique");
 		rechercheDicho(grandTableau, 1000000, 1000001);
 		// On affiche le nombre d'itération
 		System.out.println("Execute en "+(System.nanoTime()-tempsDebut)+" millisecondes, pour "+cpt+" iterations \n\n");
@@ -500,16 +498,15 @@ public class TrisTableau{
 	 */
 	void testTriParComptageFreqEfficacite(){
 		// On lance le test
-		System.out.println("On teste la procédure de rechercheDicho()");
+		System.out.println("On teste la procédure de triParComptageFreq()");
 		
 		// On crée le tableau non trié
 		int[] leTab = new int[1000000];
 		remplirAleatoire(leTab, leTab.length, 0, 100);
 
-		// On test avec la seconde methode
+		// On test la methode
 		long tempsDebut = System.nanoTime();
-		System.out.println("\nTest avec la recherche dichotomique");
-		rechercheDicho(leTab, 1000000, 101);
+		triParComptageFreq(leTab, 1000000, 101);
 		// On affiche le nombre d'itération
 		System.out.println("Execute en "+(System.nanoTime()-tempsDebut)+" millisecondes, pour "+cpt+" iterations \n\n");
 	}
@@ -518,7 +515,18 @@ public class TrisTableau{
 	 * Test de l'efficacité de la méthode triABulles
 	 */
 	void testTriABullesEfficacite(){
+		// On lance le test
+		System.out.println("On teste la procédure de triABulles()");
+		
+		// On crée le tableau non trié
+		int[] leTab = new int[1000000];
+		remplirAleatoire(leTab, leTab.length, 0, 100);
 
+		// On test la methode
+		long tempsDebut = System.nanoTime();
+		triABulles(leTab, 1000000, 101);
+		// On affiche le nombre d'itération
+		System.out.println("Execute en "+(System.nanoTime()-tempsDebut)+" millisecondes, pour "+cpt+" iterations \n\n");
 	}
 
 	/**
