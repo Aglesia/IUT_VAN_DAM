@@ -79,7 +79,12 @@ public class TrisTableau{
 	 * @param nbElem [description]
 	 */
 	void triRapide(int[] leTab, int nbElem){
-		
+		// On vérifie les paramètres
+		if(nbElem>leTab.length)
+			System.out.println("nbElem sort des limites");
+		else
+			// On appelle la méthode
+			triRapideRec(leTab, length, 0, length);
 	}
 
 	/**
