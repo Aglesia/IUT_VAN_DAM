@@ -532,7 +532,19 @@ public class TrisTableau{
 	 * Test de l'efficacité de la méthode triParComptageFreq
 	 */
 	void testTriParComptageFreqEfficacite(){
+		// On lance le test
+		System.out.println("On teste la procédure de rechercheDicho()");
+		
+		// On crée le tableau non trié
+		int[] grandTableau = new int[1000000];
+		remplirAleatoir
 
+		// On test avec la seconde methode
+		long tempsDebut = System.currentTimeMillis();
+		System.out.println("\nTest avec la recherche dichotomique");
+		rechercheDicho(grandTableau, 1000000, 999999);
+		// On affiche le nombre d'itération
+		System.out.println("Execute en "+(System.currentTimeNano()-tempsDebut)+" millisecondes, pour "+cpt+" iterations \n\n");
 	}
 
 	/**
@@ -605,6 +617,28 @@ public class TrisTableau{
 		else // Tout est OK, on commence a travailler sur le tableau
 			for (int i=0; i<nbElem; i++)
 				System.out.println("L'element n°" + i + " du tableau vaut : " + leTab[i]);
+	}
+
+	/**
+	 * A partir d'un tableau cree, remplit aleatoirement le tableau de nbElem valeurs comprises entre min et max. Tenir compte du cas
+	 * particulier ou le tableau n'est pas cree. Verifier que nbElem <= taille sinon afficher une erreur. Verifier que min <= max, sinon
+	 * afficher une erreur.
+	 * @param leTab  le tableau a remplir de valeurs tirees aleatoirement
+	 * @param nbElem le nombre d'entiers que contiendra le tableau
+	 * @param min    la valeur de l'entier minimum
+	 * @param max    la valeur de l'entier maximum
+	 */
+	void remplirAleatoire(int[] leTab, int nbElem, int min, int max){
+		// On verifie les parametres
+		if(leTab==null)
+			System.out.println("Le tableau n'est pas initialise");
+		else if(nbElem>leTab.length || nbElem<1)
+			System.out.println("La longeur demandee sort des limites");
+		else if(min>=max)
+			System.out.println("max plus petit que min");
+		else
+			for(int i=0; i<nbElem; i++)
+				leTab[i] = tirerAleatoire(min, max);
 	}
 }
 
