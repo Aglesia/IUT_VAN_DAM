@@ -90,7 +90,28 @@ public class TrisTableau{
 	 * @param nbElem [description]
 	 */
 	void triRapideRec(int[] tab, int indL, int indR){
-		
+		if(leTab==null)
+			System.out.println("Tableau non créé");
+		else if(nbElem <= 0 || nbElem > leTab.length)
+			System.out.println("nbElem en dehors des bornes du tableau");
+		else if(indL<0 || indL>leTab.length || indR<0 || indR>leTab.length)
+			System.out.println("indices en dehors des bornes du tableau");
+		else{
+			int i = indL, j = indR;
+	    	int pivot = leTab[indL + (indR-indL)/2];
+			while (i <= j) {
+				while (leTab[i] < pivot)
+					i++;
+				while (leTab[j] > pivot)
+					j--;
+				if (i <= j)
+					echange(leTab, nbElem, i++, j++);
+			}
+			if (indL < j)
+				triRapide(leTab, nbElem, indL, j);
+			if (i < indR)
+				triRapide(leTab, nbElem, i, indR);
+		}
 	}
 
 	/**
@@ -101,7 +122,35 @@ public class TrisTableau{
 	 * @return      [description]
 	 */
 	int separer(int[] tab, int indL, int indR){
-		return 0;
+		if(leTab!=null){
+			System.out.println("Tableau non créé");
+			indL = -1;
+		}
+		else if(indL<0 || indR>tab.length || indL>=indR){
+			System.out.println("Indices en dehors des limites");
+			indL = -1;
+		}
+		else{
+			int pivot;
+			int nbElem = indR;
+			pivot = leTab[indL];
+			while(indL <= indR){
+				while(leTab[indR] > pivot)
+					indR--;
+
+				echange(leTab, nbElem, indL, indR);
+				indL++;
+				if (indL == indR)
+					break;
+
+				while(leTab[indL] < pivot)
+					indL++;
+
+				echange(leTab, nbElem, indL, indR);
+				indR--;
+			}
+		}
+		return indL;
 	}
 
 	/**
