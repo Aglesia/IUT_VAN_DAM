@@ -101,27 +101,7 @@ public class TrisTableau{
 	 * @return      [description]
 	 */
 	int separer(int[] tab, int indL, int indR){
-		/*// On vérifie les paramètres
-		if(tab==null)
-			System.out.println("Tableau non initialise");
-		else if(indL<0 || indR>tab.length || indL>=indR)
-			System.out.println("Indices sortent des limites");
-		else{
-			int pivot = tab[indL];
-			while(indL<indR){
-				while(tab[indR]>pivot)
-					indR--;
-				echange(tab, indL,indR);
-				if(indL==indR)
-					break;
-				indL++;
-				while(tab[indL]<pivot)
-					indL++;
-				echange(tab, indL,indR);
-				indR--;
-			}
-		}
-		return indL;*/
+		return 0;
 	}
 
 	/**
@@ -506,7 +486,7 @@ public class TrisTableau{
 
 		// On test la methode
 		long tempsDebut = System.nanoTime();
-		triParComptageFreq(leTab, 1000000, 101);
+		triParComptageFreq(leTab, 1000000);
 		// On affiche le nombre d'itération
 		System.out.println("Execute en "+(System.nanoTime()-tempsDebut)+" millisecondes, pour "+cpt+" iterations \n\n");
 	}
@@ -524,7 +504,7 @@ public class TrisTableau{
 
 		// On test la methode
 		long tempsDebut = System.nanoTime();
-		triABulles(leTab, 1000000, 101);
+		triABulles(leTab, 1000000);
 		// On affiche le nombre d'itération
 		System.out.println("Execute en "+(System.nanoTime()-tempsDebut)+" millisecondes, pour "+cpt+" iterations \n\n");
 	}
@@ -542,7 +522,7 @@ public class TrisTableau{
 
 		// On test la methode
 		long tempsDebut = System.nanoTime();
-		triSimple(leTab, 1000000, 101);
+		triSimple(leTab, 1000000);
 		// On affiche le nombre d'itération
 		System.out.println("Execute en "+(System.nanoTime()-tempsDebut)+" millisecondes, pour "+cpt+" iterations \n\n");
 	}
@@ -560,7 +540,7 @@ public class TrisTableau{
 
 		// On test la methode
 		long tempsDebut = System.nanoTime();
-		triRapide(leTab, 1000000, 101);
+		triRapide(leTab, 1000000);
 		// On affiche le nombre d'itération
 		System.out.println("Execute en "+(System.nanoTime()-tempsDebut)+" millisecondes, pour "+cpt+" iterations \n\n");
 	}
