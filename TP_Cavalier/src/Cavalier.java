@@ -8,7 +8,7 @@ public class Cavalier{
 	/**
 	 * La taille de l'échiquier en constante
 	 */
-	int TAILLE_ECHEC = 6;
+	int TAILLE_ECHEC = 10;
 	/**
 	 * L'échiquier qui permet de visualiser les déplacements du cavalier
 	 */
@@ -20,7 +20,7 @@ public class Cavalier{
 	/**
 	 * Indique si nous travaillons avec un cavalier ou un roi
 	 */
-	boolean Roi;
+	boolean roi;
 
 	/**
 	 * Methode principale
@@ -127,7 +127,7 @@ public class Cavalier{
 	 */
 	void donnerSuivants(int posX, int posY, int[][] candidats){
 		// On remplie à la main les cases
-		if(Roi){
+		if(roi){
 			candidats[0][0] = posX-1;
 			candidats[1][0] = posX-1;
 			candidats[2][0] = posX-1;
@@ -197,7 +197,7 @@ public class Cavalier{
 			donnerSuivants(posX, posY, casesSuivantes);
 
 			// On test chaque case
-			for(int i=0; i<8; i++)
+			for(int i=0; i<8 && !retour; i++)
 				if(estCeValide(casesSuivantes[i][0], casesSuivantes[i][1]))
 					// Si c'est une case valide, on se rappelle, et on récupère le retour
 					if(essayer(casesSuivantes[i][0], casesSuivantes[i][1]))
@@ -244,11 +244,11 @@ public class Cavalier{
 		numCoup = 0;
 
 		// On demande quel pièce il faut jouer
-		char car = SimpleInput.getChar("R pour jouer le Roi, C pour le Cavalier :");
+		char car = SimpleInput.getChar("R pour jouer le roi, C pour le Cavalier :");
 		while(car != 'C' && car != 'R' && car != 'c' && car != 'r')
-			car = SimpleInput.getChar("R pour jouer le Roi, C pour le Cavalier :");
+			car = SimpleInput.getChar("R pour jouer le roi, C pour le Cavalier :");
 
-		Roi = (car == 'r' || car == 'R');
+		roi = (car == 'r' || car == 'R');
 
 		// On appelle la méthode d'essaie
 		if(essayer((int)(Math.random()*(TAILLE_ECHEC-1)), (int)(Math.random()*(TAILLE_ECHEC-1))))
