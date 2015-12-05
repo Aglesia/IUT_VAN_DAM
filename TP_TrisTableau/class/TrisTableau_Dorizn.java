@@ -15,15 +15,22 @@ public class TrisTableau{
 	 */
 	void principal(){
 		// Test des methodes
-		testCreerTabFreq();
+		// testCreerTabFreq(); // OK
+		// testTriSimpleEtVeriftri(); // OK
+		// testRechercheDicho(); // OK
+		// testRechercheSeq(); // OK
+		testTriRapide(); // PAS OK
+		testSeparer(); // PAS OK
+		// testTriParComptageFreq(); // OK
+		// testTriABulles(); // OK
 
 		// On fait les tests, avec des tailles différentes de tableau
-		/*System.out.println("Tests de performance, avec différentes tailles de tableau...\n+-------------------+----------------+--------------------------------+-------------------+\n| Taille (nb cases) | Methode testee | temps execution (nanosecondes) | nombre iterations |\n+-------------------+----------------+--------------------------------+-------------------+");
+		/*System.out.println("Tests de performance, avec differentes tailles de tableau...\n+-------------------+----------------+--------------------------------+-------------------+\n| Taille (nb cases) | Methode testee | temps execution (nanosecondes) | nombre iterations |\n+-------------------+----------------+--------------------------------+-------------------+");
 
 		// Test de performance des methodes
-		for(int i=1000; i<1000001; i*=10){
+		for(int i=10; i<10001; i*=10){
 			testTriSimpleEfficacite(i);
-			testTriRapideEfficacite(i);
+			//testTriRapideEfficacite(i);
 			testTriABullesEfficacite(i);
 			testRechercheSeqEfficacite(i);
 			testRechercheDichoEfficacite(i);
@@ -98,7 +105,7 @@ public class TrisTableau{
 			System.out.println("nbElem sort des limites");
 		else
 			// On appelle la méthode
-			triRapideRec(leTab, 0, nbElem);
+			triRapideRec(leTab, 0, nbElem-1);
 	}
 
 	/**
@@ -112,19 +119,19 @@ public class TrisTableau{
 		// On vérifie les paramètres
 		if(leTab==null)
 			System.out.println("Tableau non créé");
-		else if(indL<0 || indL>leTab.length || indR<0 || indR>leTab.length)
+		else if(indL<0 || indL>=leTab.length || indR<0 || indR>=leTab.length)
 			System.out.println("indices en dehors des bornes du tableau");
 		else{
 			// On fait le trie rapide
 			int i = indL, j = indR;
-	    	int pivot = leTab[indL + (indR-indL)/2];
-			while (i <= j) {
-				while (leTab[i] < pivot)
+	    	int pivot = leTab[indL + (int)((indR-indL)/2)];
+			while(i <= j) {
+				while(leTab[i] < pivot)
 					i++;
-				while (leTab[j] > pivot)
+				while(leTab[j] > pivot)
 					j--;
 				if (i <= j)
-					echange(leTab, leTab.length, i++, j++);
+					echange(leTab, leTab.length, i, j);
 			}
 			if(indL < j)
 				triRapideRec(leTab, indL, j);
@@ -214,7 +221,7 @@ public class TrisTableau{
 			// On inverse la case minimum avec la case i
 			// A partir de là, toutes les cases entre 0 et i sont triées.
 			// On incrémente i, et on recommence
-			for(i=0; i<(nbElem-1); i++){
+			for(i=0; i<(nbElem-2); i++){
 				// On défini le minimum de base
 				min=leTab[i];
 				k=i;
@@ -230,9 +237,7 @@ public class TrisTableau{
 					}
 				}
 				// On inverse le minimum actuel (k) avec la case actuelle (i) (compris ? xD)
-				leTab[k] += leTab[i];
-				leTab[i] = leTab[k]-leTab[i];
-				leTab[k] = leTab[k]-leTab[i];
+				echange(leTab, i, k);
 			}
 	}
 
@@ -281,8 +286,8 @@ public class TrisTableau{
 	 */
 	int rechercheDicho(int[] leTab, int nbElem, int aRech){
 		// On crée les variables
-		int noCaseAbs = 0;
-		int noCaseRel = nbElem;
+		int noCaseMin = 0;
+		int noCaseMax = nbElem-1;
 		int retour = -1;
 		cpt = 0;
 
@@ -290,22 +295,28 @@ public class TrisTableau{
 		if(nbElem>leTab.length)
 			System.out.println("nbElem sort des limites");
 		else{
-			// On lance la recherche
-			while(leTab[noCaseAbs+noCaseRel]!=aRech && noCaseRel<1){
-				noCaseRel = (int)(noCaseRel/2);
+			while(noCaseMin<noCaseMax){
+				// On regarde si la valeur du millieu est plus grand ou plus petit
+				int caseMillieu = (int)((noCaseMax-noCaseMin)/2)+noCaseMin;
+				if(caseMillieu==noCaseMin)
+					caseMillieu = noCaseMin+1;
+				if(leTab[caseMillieu]==aRech){
+					noCaseMin = caseMillieu;
+					noCaseMax = noCaseMin;
+				}
+				else if(leTab[caseMillieu]<aRech)
+					noCaseMin = caseMillieu;
+				else
+					noCaseMax = caseMillieu;
 
-				// On sélectionne la case minimum
-				if(leTab[noCaseAbs+noCaseRel]<aRech)
-					noCaseAbs += noCaseRel;
-
-				// On compte le nombre d'itération
+				// On incrémente le nombre d'ittérations
 				cpt++;
 			}
-		}
 
-		// On regarde si la valeur a été trouvée
-		if(leTab[noCaseAbs+noCaseRel]==aRech)
-			retour = noCaseAbs+noCaseRel;
+			// On regarde si la valeur est trouvée
+			if(leTab[noCaseMax] == aRech)
+				retour = noCaseMax;
+		}
 
 		// On retourne la valeur (-1 si non trouvé)
 		return retour;
@@ -319,9 +330,12 @@ public class TrisTableau{
 	 */
 	void echange(int[] leTab, int ind1, int ind2){
 		// On fait l'échange
-		leTab[ind1] += leTab[ind2];
+		int tempon = leTab[ind1];
+		leTab[ind1] = leTab[ind2];
+		leTab[ind2] = tempon;
+		/*leTab[ind1] += leTab[ind2];
 		leTab[ind2] = leTab[ind1] - leTab[ind2];
-		leTab[ind1] = leTab[ind1] - leTab[ind2];
+		leTab[ind1] = leTab[ind1] - leTab[ind2];*/
 	}
 
 	/**
@@ -332,7 +346,7 @@ public class TrisTableau{
 	 * @return        [description]
 	 */
 	int[] triParComptageFreq(int[] leTab, int nbElem){
-		int[] ret = new int[nbElem];
+		int[] ret = new int[nbElem+1];
 		cpt = 0;
 		// On vérifie les paramètres
 		if(nbElem>leTab.length)
@@ -343,7 +357,7 @@ public class TrisTableau{
 			int[] tabFreq = creerTabFreq(leTab, nbElem);
 			for(int i=0; i<tabFreq.length; i++)
 				if(tabFreq[i]!=0)
-					for(int j=0; j<=tabFreq[i]; j++){
+					for(int j=0; j<tabFreq[i]; j++){
 						ret[indice] = i;
 						indice++;
 						cpt++;
@@ -384,7 +398,7 @@ public class TrisTableau{
 			System.out.println("Les valeurs ne sont pas assez grandes");
 		else{
 			// On initialise le tableau
-			retour = new int[max];
+			retour = new int[max+1];
 			// Pour chaque case, on regarde la fréquence
 			for(int i=0; i<nbElem; i++){
 				retour[leTab[i]]++;
@@ -419,39 +433,49 @@ public class TrisTableau{
 	}
 
 
-///////////////////////////////////// METHODES DE TEST /////////////////////////////////////////
+	///////////////////////////////////// METHODES DE TEST /////////////////////////////////////////
 
 	/**
 	 * Test des méthodes triSimple et verifTri
 	 */
 	void testTriSimpleEtVeriftri(){
 		// On crée les variables necessaires
-		int[] leTab = new int[3];
+		int[] leTab = new int[10];
+		int[] leTabTri = new int[3];
 		
 
 		// On vérifie un trie avec un tableau non trié
-		System.out.println("\nOn teste la procédure verifTri(), avec un tableau non trié");
-		System.out.println("Debut du test de triSimple()");
+		System.out.println("\nOn teste la procédure verifTri(), avec un tableau non trie");
+		System.out.println("Debut du test de verifTri()");
 		leTab[0] = 3;
 		leTab[1] = 1;
 		leTab[2] = 9;
+		leTabTri[0] = 2;
+		leTabTri[1] = 6;
+		leTabTri[2] = 9;
 
-		if(!verifTri(leTab, 3))
+
+		if(!verifTri(leTab, 3) && verifTri(leTabTri, 3))
 			System.out.println("La procédure fonctionne");
 		else
-			System.out.println("Une erreur s'est produite lors de la vérification du trie...");
+			System.out.println("Une erreur s'est produite lors de la vérification du tri...");
 
 		// On test avec un tableau normal
-		leTab[0] = 3;
-		leTab[1] = 1;
-		leTab[2] = 9;
+		remplirAleatoire(leTab, 10, 0, 100);
 		System.out.println("Debut du test de triSimple()");
-		System.out.println("Test avec un tableau normal :");
-		triSimple(leTab, 3);
+		System.out.println("Test avec un tableau normal :\nAvant tri :");
+		// On affiche le tableau
+		afficherTab(leTab, 10);
+		triSimple(leTab, 10);
+		// On affiche le tableau
+		System.out.println("Apres tri :");
+		afficherTab(leTab, 10);
+
+		// On regarde si la methode fonctionne
 		if(verifTri(leTab, 3))
 			System.out.println("Le tableau est bien trie");
 		else
-			System.out.println("Une erreur s'est produite lors du trie");
+			System.out.println("Une erreur s'est produite lors du tri");
 
 		// On termine ce test
 		System.out.println("Fin des tests\n\n");
@@ -466,12 +490,14 @@ public class TrisTableau{
 
 		System.out.println("La valeur recherchee est presente : ");	
 		remplirAleatoire(leTab, 100, 0, 99);
-		remplacerAuHasard(leTab, 100, 86);
-		System.out.println("Retour de la méthode : " + rechercheDicho(leTab, 100, 86));
+		// On place une valeur dans le tableau
+		leTab[75] = 86;
+		// On tri le tableau
+		triSimple(leTab, leTab.length);
+		System.out.println("Retour de la methode : " + rechercheDicho(leTab, 100, 86));
 
 		System.out.println("La valeur recherchee n'est pas presente : ");
-		remplirAleatoire(leTab, 100, 0, 42);
-		System.out.println("Retour de la méthode : " + rechercheDicho(leTab, 100, 86));
+		System.out.println("Retour de la methode : " + rechercheDicho(leTab, 100, 100));
 
 		// On termine ce test
 		System.out.println("Fin des tests\n\n");
@@ -481,7 +507,7 @@ public class TrisTableau{
 	 * Test de la méthode rechercheSeq
 	 */
 	void testRechercheSeq(){
-		System.out.println("On test la procédure rechercheDicho()");
+		System.out.println("On test la procédure rechercheSeq()");
 		int [] leTab = new int[100];
 
 		System.out.println("La valeur recherchee est presente : ");	
@@ -502,10 +528,10 @@ public class TrisTableau{
 	 */
 	void testTriRapide(){
 		System.out.println("On test la procédure triRapide()");
-		int [] leTab = new int[100];
+		int[] leTab = new int[10];
 
 		System.out.println("On remplie un tableau de manière aléatoire...");	
-		remplirAleatoire(leTab, 100, 0, 99);
+		remplirAleatoire(leTab, 10, 0, 99);
 		triRapide(leTab, leTab.length);
 		System.out.print("Le tableau est trie : ");
 
@@ -533,14 +559,14 @@ public class TrisTableau{
 		int [] leTab = new int[10];
 
 		System.out.println("On remplie un tableau de manière aléatoire...");	
-		remplirAleatoire(leTab, 100, 0, 10);
+		remplirAleatoire(leTab, 10, 0, 10);
 
 		// On affiche le tableau de base
 		afficherTab(leTab, leTab.length);
 
 		// On trie, et on affiche le nouveau tableau
-		creerTabFreq(leTab, leTab.length);
-		afficherTab(leTab, leTab.length);
+		System.out.println("Le tableau de frequence : ");
+		afficherTab(creerTabFreq(leTab, leTab.length), leTab.length);
 
 		// On termine ce test
 		System.out.println("Fin des tests\n\n");
@@ -555,13 +581,10 @@ public class TrisTableau{
 
 		System.out.println("On remplie un tableau de manière aléatoire...");	
 		remplirAleatoire(leTab, 100, 0, 99);
-		triParComptageFreq(leTab, leTab.length);
-		System.out.print("Le tableau est trie : ");
 
-		if(verifTri(leTab, leTab.length))
-			System.out.println("Oui");
-		else
-			System.out.println("Non");
+		// On regarde la gueule du tableau
+		System.out.println("Le tableau trie est comme ceci :");
+		afficherTab(triParComptageFreq(leTab, leTab.length), leTab.length);
 
 		// On termine ce test
 		System.out.println("Fin des tests\n\n");
@@ -594,9 +617,6 @@ public class TrisTableau{
 	 * [testRechercheSeqEfficacite description]
 	 */
 	void testRechercheSeqEfficacite(int nbCases){
-		// On lance le test
-		System.out.println("On teste la procédure de rechercheSeq()");
-		
 		// On crée le tableau
 		int[] grandTableau = new int[nbCases];
 
@@ -610,9 +630,6 @@ public class TrisTableau{
 	 * Test de l'efficacité de la méthode rechercheDicho
 	 */
 	void testRechercheDichoEfficacite(int nbCases){
-		// On lance le test
-		System.out.println("On teste la procédure de rechercheDicho()");
-		
 		// On crée le tableau trié
 		int[] grandTableau = new int[nbCases];
 		for(int i=0; i<nbCases; i++)
@@ -629,9 +646,6 @@ public class TrisTableau{
 	 * Test de l'efficacité de la méthode triParComptageFreq
 	 */
 	void testTriParComptageFreqEfficacite(int nbCases){
-		// On lance le test
-		System.out.println("On teste la procédure de triParComptageFreq()");
-		
 		// On crée le tableau non trié
 		int[] leTab = new int[nbCases];
 		remplirAleatoire(leTab, leTab.length, 0, 100);
@@ -647,9 +661,6 @@ public class TrisTableau{
 	 * Test de l'efficacité de la méthode triABulles
 	 */
 	void testTriABullesEfficacite(int nbCases){
-		// On lance le test
-		System.out.println("On teste la procédure de triABulles()");
-		
 		// On crée le tableau non trié
 		int[] leTab = new int[nbCases];
 		remplirAleatoire(leTab, leTab.length, 0, 100);
@@ -665,9 +676,6 @@ public class TrisTableau{
 	 * Test de l'efficacité de la méthode triSimple
 	 */
 	void testTriSimpleEfficacite(int nbCases){
-		// On lance le test
-		System.out.println("On teste la procédure de triSimple()");
-		
 		// On crée le tableau non trié
 		int[] leTab = new int[nbCases];
 		remplirAleatoire(leTab, leTab.length, 0, 100);
@@ -683,9 +691,6 @@ public class TrisTableau{
 	 * Test de l'efficacité de la méthode triRapide
 	 */
 	void testTriRapideEfficacite(int nbCases){
-		// On lance le test
-		System.out.println("On teste la procédure de triRapide()");
-		
 		// On crée le tableau non trié
 		int[] leTab = new int[nbCases];
 		remplirAleatoire(leTab, leTab.length, 0, 100);
@@ -721,7 +726,7 @@ public class TrisTableau{
 			// On inverse les valeurs
 			leTab[ind1] += leTab[ind2];
 			leTab[ind2] = leTab[ind1] - leTab[ind2];
-			leTab[ind1] = leTab[ind1] - leTab[ind2];
+			leTab[ind1] -= leTab[ind2];
 		}
 	}
 
@@ -771,12 +776,12 @@ public class TrisTableau{
 	 */
 	int tirerAleatoire(int min, int max){
 		// On verifie les parametres
+		int retour = max;
 		if(min>=max)
 			System.out.println("Le minimum est plus grand ou egual au maximum...");
-		else{
-			return (int)(Math.random() * (max-min)) + min;
-		}
-		return max; // On retourne le nombre plus petit (max<min)
+		else
+			retour = (int)(Math.random() * (max-min)) + min;
+		return retour; // On retourne le nombre plus petit (max<min)
 	}
 }
 
