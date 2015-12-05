@@ -10,6 +10,6 @@ public class Cavalier{
 	}
 }
 
-// Compil  : javac -d ../class ../src/TrisTableau.java
+// Compil  : javac -d ../class ../src/Cavalier.java
 // execut  : java Start SimplesTableau
-// Javadoc : javadoc -private -d ../JavaDoc ../src/TrisTableau.java
+// Javadoc : javadoc -private -d ../JavaDoc ../src/Cavalier.java
