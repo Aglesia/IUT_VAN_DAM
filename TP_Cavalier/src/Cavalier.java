@@ -8,7 +8,7 @@ public class Cavalier{
 	/**
 	 * La taille de l'échiquier en constante
 	 */
-	int TAILLE_ECHEC = 10;
+	int TAILLE_ECHEC;
 	/**
 	 * L'échiquier qui permet de visualiser les déplacements du cavalier
 	 */
@@ -31,6 +31,7 @@ public class Cavalier{
 		// testAfficherDamier();
 		// testDonnerSuivants();
 		// testEstCeValide();
+		// testEssayer();
 	}
 
 	///////////////////////// METHODES PRINCIPALES ////////////////////////////////////
@@ -41,15 +42,13 @@ public class Cavalier{
 	 * @return   Log10 de la valeur entrée
 	 */
 	int logDix(int n){
-		int retour = 0;
+		int retour = 1;
 
 		// On regarde combien de division nous pouvons faire
 		while(n>9){
 			n/=10;
 			retour++;
 		}
-
-		retour++;
 
 		// On retourne le nombre d'itération
 		return retour;
@@ -185,8 +184,7 @@ public class Cavalier{
 		boolean retour = false;
 
 		// On incrémente le numéro de la case, et on indique qu'on est dessus
-		numCoup++;
-		damier[posX][posY] = numCoup;
+		damier[posX][posY] = ++numCoup;
 
 		// Si c'est la dernière case, on retourne vrai
 		if(numCoup == TAILLE_ECHEC*TAILLE_ECHEC)
@@ -203,6 +201,12 @@ public class Cavalier{
 					if(essayer(casesSuivantes[i][0], casesSuivantes[i][1]))
 						// On met le retour à vrai
 						retour = true;
+
+			// Si on a rien trouvé on nettoie la case, et on décrémente le nombre de coup
+			if(!retour){
+				damier[posX][posY] = 0;
+				numCoup--;
+			}
 		}
 
 		// On retourne
@@ -239,6 +243,9 @@ public class Cavalier{
 	 * affiché car le chemin est trouvé, soit il n'y a pas de solution possible.
 	 */
 	void lanceur(){
+		// On demande à l'utilisateur la taille du tableau
+		TAILLE_ECHEC = SimpleInput.getInt("Entrez la taille du damier :");
+
 		// On crée le damier
 		damier = new int[TAILLE_ECHEC][TAILLE_ECHEC];
 		numCoup = 0;
@@ -250,12 +257,28 @@ public class Cavalier{
 
 		roi = (car == 'r' || car == 'R');
 
+		// On demande la case de départ
+		int[] caseDepart = new int[2];
+		caseDepart[0] = SimpleInput.getInt("Position initiale en X (-1 pour aléatoire)");
+		caseDepart[1] = SimpleInput.getInt("Position initiale en Y (-1 pour aléatoire)");
+
+		if(caseDepart[0]<0 || caseDepart[0]>=TAILLE_ECHEC)
+			caseDepart[0] = (int)(Math.random()*(TAILLE_ECHEC-1));
+		if(caseDepart[1]<0 || caseDepart[1]>=TAILLE_ECHEC)
+			caseDepart[1] = (int)(Math.random()*(TAILLE_ECHEC-1));
+
+		// On initialise le temps
+		long time = System.currentTimeMillis();
+
 		// On appelle la méthode d'essaie
-		if(essayer((int)(Math.random()*(TAILLE_ECHEC-1)), (int)(Math.random()*(TAILLE_ECHEC-1))))
+		if(essayer(caseDepart[0], caseDepart[1]))
 			// S'il le faut, on affiche le damier
 			afficherDamier();
 		else
 			System.out.println("Pas de solution");
+
+		// On affiche le temps de calcul et d'affichage du tableau
+		System.out.println("Calcul des possibilités et affichage des valeurs effectuées en " + (int)((System.currentTimeMillis()-time)/1000) + " secondes.");
 	}
 
 	///////////////////////////////////////////// METHODES DE TEST ////////////////////////////////////////////////////
@@ -306,7 +329,8 @@ public class Cavalier{
 	 * Test de la méthode essayer()
 	 */
 	void testEssayer(){
-		// 
+		// On lance le lanceur, et l'utilisateur vérifie que ça fonctionne
+		lanceur();
 	}
 
 	/**
