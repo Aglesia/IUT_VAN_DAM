@@ -2,6 +2,8 @@
  * Cette classe met en oeuvre l'algorithme par essai/erreur récursif du déplacement d'un cavalier sur un échiquier. A partir d'une case de
  * départ, si un chemin pour parcourir toutes les cases une seule fois est trouvé alors l'échiquier est affiché avec le parcours complet du
  * cavalier.
+ *
+ * @author Dorian FRAGNI
  */
 public class Cavalier{
 	// Variables globales
